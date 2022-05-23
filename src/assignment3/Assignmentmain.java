@@ -13,6 +13,13 @@ public class Assignmentmain {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
+		/*
+		 * *****************************************************************************
+		 * *****
+		 ***** Task 1 Start
+		 * ******************************************************************
+		 */
+
 		List<String> data = new ArrayList<String>();
 		List<String> accounts = new ArrayList<String>();
 
@@ -65,20 +72,36 @@ public class Assignmentmain {
 					Character.getNumericValue(data.get(j).charAt(2)));
 		}
 
+		/*
+		 * *****************************************************************************
+		 * *****
+		 ***** Task 2 Start
+		 * ******************************************************************
+		 */
+		
 		Scanner response = new Scanner(System.in);
 
 		System.out.println("Please enter a name: ");
 		String name = response.next().toLowerCase();
 		boolean nameFound = false;
-		int k; 
+		int k;
+		int indexOfName = 0;
+
 
 		if (socialGraph.size() > 0) {
 			for (k = 0; k < accounts.size() - 1; k++) {
 				if (name.equals(socialGraph.getLabel(k))) {
+					indexOfName = k;
 					System.out.println("Success!!");
 					nameFound = true;
-					System.out.println(socialGraph.neighbors(k));
 					break;
+				}
+			}
+			if (nameFound == true) {
+				for (int l = 0; l < socialGraph.size(); l++) {
+					if (socialGraph.isEdge(l, indexOfName) && indexOfName != l) {
+						System.out.println(socialGraph.getLabel(l));
+					}
 				}
 			}
 			if (k == accounts.size() - 1 && nameFound == false) {
@@ -88,8 +111,56 @@ public class Assignmentmain {
 			System.err.println("ERROR: No users found!");
 
 		}
-
 		response.close();
+
+		/*
+		 * *****************************************************************************
+		 * *****
+		 ***** Task 3 Start
+		 * ******************************************************************
+		 */
+
+		 System.out.println("TASK 3: Please enter a name: ");
+
+		 Scanner task3Response = new Scanner(System.in);
+
+		 String task3Name = task3Response.next().toLowerCase();
+
+		 boolean found = false;
+
+		 int m;
+		 int indexNameTask3 = 0;
+		 List<Integer> friendIndex = new ArrayList<Integer>();
+
+		 if (socialGraph.size() > 0) {
+			for (m = 0; m < accounts.size() - 1; m++) {
+				if (name.equals(socialGraph.getLabel(m))) {
+					indexNameTask3 = m;
+					System.out.println("Success!!");
+					found = true;
+					break;
+				}
+			}
+			if (found == true) {
+				for (int l = 0; l < socialGraph.size(); l++) {
+					if (socialGraph.isEdge(l, indexOfName) && indexOfName != l) {
+						friendIndex.add(l);
+					}
+				}
+				for(int p = 0; p < socialGraph.size(); p++){
+					if(socialGraph.isEdge(friendIndex.get(p), p) && friendIndex.get(p) != p){
+						System.out.println(socialGraph.getLabel(p));
+					}
+				}
+			}
+			if (m == accounts.size() - 1 && found == false) {
+				System.out.println("ERROR: User not found!");
+			}
+		} else {
+			System.err.println("ERROR: No users found!");
+
+		}
+		task3Response.close();
 
 	}
 
