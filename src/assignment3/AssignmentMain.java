@@ -76,7 +76,7 @@ public class AssignmentMain {
     }
 
 
-    public static List<String> SearchForCommonFriends(Graph socialGraph, int n){
+    public static List<String> SearchForCommonFriends(Graph socialGraph, int n) {
         List<String> commonFriends = new ArrayList<>();
 
         Scanner response = new Scanner(System.in);
@@ -89,15 +89,52 @@ public class AssignmentMain {
         List<String> name1Friends = SearchForFriends(name1, socialGraph, n);
         List<String> name2Friends = SearchForFriends(name2, socialGraph, n);
 
-        if(name1Friends.size() > name2Friends.size()){
-            for (int i = 0; i < name1Friends.size(); i++){
-                if (name2Friends.contains(name1Friends.get(i))){
+        if (name1Friends.size() > name2Friends.size()) {
+            for (int i = 0; i < name1Friends.size(); i++) {
+                if (name2Friends.contains(name1Friends.get(i))) {
                     commonFriends.add(name1Friends.get(i));
                 }
             }
         }
 
         return commonFriends;
+    }
+
+    public static void RemoveAccount(Graph socialGraph) {
+        Scanner response = new Scanner(System.in);
+        String name;
+        List<String> friends;
+        List<Integer> friendIndex = new ArrayList();
+        int accountIndex = 0;
+
+
+        System.out.println("Please enter the name of the account you would like to remove: ");
+        if (response.hasNext()) {
+            name = response.next().toLowerCase();
+            System.out.println("Are you sure you wish to delete account " + name + "?");
+            if (response.hasNext()) {
+                if (response.next().equals("y") || response.next().equals("yes")) {
+                    friends = SearchForFriends(name, socialGraph, socialGraph.size());
+                    for (int k = 0; k < friends.size(); k++) {
+                        for (int l = 0; l < socialGraph.size(); l++) {
+                            if (friends.get(k).equals(socialGraph.getLabel(l))) {
+                                friendIndex.add(l);
+                            } else if (name.equals(socialGraph.getLabel(l))) {
+                                accountIndex = l;
+                            }
+                        }
+                    }
+                    for (int p = 0; p < friendIndex.size(); p++) {
+                        socialGraph.removeEdge(friendIndex.get(p), accountIndex);
+                        socialGraph.removeEdge(accountIndex, friendIndex.get(p));
+                    }
+
+                    socialGraph.setLabel(accountIndex, null);
+                }
+            }
+        } else {
+            System.out.println("ERROR:: Name cannot be null. ");
+        }
     }
 
     public static void main(String[] args) {
@@ -164,7 +201,6 @@ public class AssignmentMain {
                     Character.getNumericValue(data.get(j).charAt(0)));
         }
 
-        System.out.println(socialGraph.isEdge(0,3));
         /*
          * *****************************************************************************
          * *****
@@ -184,12 +220,13 @@ public class AssignmentMain {
 
         SearchForFriendsOfFriends(SearchForFriends(PromptForName(), socialGraph, n), socialGraph, n);
 
-         // Task 4 Start
+        // Task 4 Start
         SearchForCommonFriends(socialGraph, n);
 
         // Task 5 Start
-        
+        RemoveAccount(socialGraph);
 
+        // Task 6
 
     }
 }
